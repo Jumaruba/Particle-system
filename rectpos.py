@@ -1,10 +1,10 @@
 import random
 import pygame
-from Flags import *
+from flags import *
 
 
 # this class handle the movement of all the particles
-class Arr_pos:
+class ArrPos:
     def __init__(self, array, width, height, display):
         self.array = array
         self.width = width
@@ -32,11 +32,13 @@ class Arr_pos:
             if i.x < 0:
                 i.x = self.width
             # Draw the rectangle
+            for j in self.array:
+                if i.check_collision(j):
+                    i.color = BLACK
             pygame.draw.rect(self.display, i.color, (i.x, i.y, 10, 10))
 
 
-
-class rect_pos:
+class RectPos:
     def __init__(self, x, y, Vx, Vy, color=RED):
         self.x = x
         self.y = y
@@ -56,3 +58,10 @@ class rect_pos:
         self.Vx += self.accel
         self.randomize_accel()
         self.Vy += self.accel
+
+    def check_collision(self, obj):
+        if self == obj:
+            return False
+        if (self.x < obj.x < self.x + 10 or self.x < obj.x + 10 < self.x + 10) and (self.y < obj.y < self.y + 10 or self.y < obj.y + 10 < self.y + 10):
+            return True
+        return False
